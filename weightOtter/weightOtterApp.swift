@@ -29,10 +29,6 @@ struct WeightOtterApp: App {
             .environmentObject(store)
             .environmentObject(loc)
             .preferredColorScheme(.dark)
-            .task {
-                // Consentement (UMP puis ATT) + démarrage du SDK publicitaire.
-                await AdManager.shared.start()
-            }
         }
     }
 }

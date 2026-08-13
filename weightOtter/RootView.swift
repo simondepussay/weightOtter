@@ -28,6 +28,13 @@ struct RootView: View {
         .task {
             await store.restoreSession()
             checked = true
+
+            // Consentement publicitaire (UMP puis ATT) seulement ICI :
+            // RootView n'apparaît qu'une fois l'avertissement santé accepté.
+            // Lancé depuis la scène, le popup de suivi Apple s'empilait
+            // par-dessus cet avertissement au tout premier démarrage — mauvais
+            // pour le taux d'acceptation, et risqué en revue App Store.
+            await AdManager.shared.start()
         }
     }
 }

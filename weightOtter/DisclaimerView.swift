@@ -15,16 +15,21 @@ struct DisclaimerView: View {
 
             ScrollView {
                 VStack(spacing: 22) {
-                    Image("spaceotter")
-                        .resizable()
-                        .renderingMode(.original)
-                        .scaledToFit()
-                        .frame(width: 80, height: 80)
-                        .padding(.top, 36)
+                    // Loutre et titre serrés ensemble : le bloc d'en-tête
+                    // mangeait la moitié de l'écran avant que le texte
+                    // d'avertissement commence.
+                    VStack(spacing: 6) {
+                        Image("spaceotter")
+                            .resizable()
+                            .renderingMode(.original)
+                            .scaledToFit()
+                            .frame(width: 80, height: 80)
 
-                    Text("⚖ WEIGHTOTTER")
-                        .font(.system(size: 20, weight: .bold, design: .monospaced))
-                        .foregroundColor(.woBlue)
+                        Text("⚖ WEIGHTOTTER")
+                            .font(.system(size: 20, weight: .bold, design: .monospaced))
+                            .foregroundColor(.woBlue)
+                    }
+                    .padding(.top, 8)
 
                     Text(loc.t("disc.warning"))
                         .font(.system(size: 13, weight: .bold, design: .monospaced))
