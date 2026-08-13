@@ -1,0 +1,5 @@
+/* Nom affiché sous l'icône */
+"CFBundleDisplayName" = "Diet Otter";
+
+/* Popup App Tracking Transparency (publicités) */
+"NSUserTrackingUsageDescription" = "Autorise le suivi pour recevoir des publicités adaptées. Refuser n'empêche rien : tu verras simplement des publicités non personnalisées.";

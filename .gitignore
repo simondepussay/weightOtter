@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+
+# Xcode — réglages locaux, propres à chaque machine
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+
+# Build
+build/
+DerivedData/
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager — le cache local seulement.
+# Package.resolved est volontairement versionné : il fige les versions
+# exactes des dépendances (Supabase, Google Mobile Ads).
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+.build/

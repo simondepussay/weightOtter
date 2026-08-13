@@ -1,0 +1,5 @@
+/* Nom affiché sous l'icône */
+"CFBundleDisplayName" = "Diet Otter";
+
+/* App Tracking Transparency prompt (ads) */
+"NSUserTrackingUsageDescription" = "Allow tracking to receive more relevant ads. Declining changes nothing else: you will simply see non-personalised ads.";

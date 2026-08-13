@@ -6,6 +6,16 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		AD00B0011000000000000003 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = AD00B0011000000000000002 /* GoogleMobileAds */; };
+		EEE1F9FB2FBA9E5500B662B3 /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = EEE1F9FA2FBA9E5500B662B3 /* Auth */; };
+		EEE1F9FD2FBA9E5500B662B3 /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = EEE1F9FC2FBA9E5500B662B3 /* Functions */; };
+		EEE1F9FF2FBA9E5500B662B3 /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = EEE1F9FE2FBA9E5500B662B3 /* PostgREST */; };
+		EEE1FA012FBA9E5500B662B3 /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = EEE1FA002FBA9E5500B662B3 /* Realtime */; };
+		EEE1FA032FBA9E5500B662B3 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = EEE1FA022FBA9E5500B662B3 /* Storage */; };
+		EEE1FA052FBA9E5500B662B3 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = EEE1FA042FBA9E5500B662B3 /* Supabase */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		EEE1F9BF2FBA9D0D00B662B3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +62,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD00B0011000000000000003 /* GoogleMobileAds in Frameworks */,
+				EEE1F9FF2FBA9E5500B662B3 /* PostgREST in Frameworks */,
+				EEE1F9FD2FBA9E5500B662B3 /* Functions in Frameworks */,
+				EEE1FA052FBA9E5500B662B3 /* Supabase in Frameworks */,
+				EEE1F9FB2FBA9E5500B662B3 /* Auth in Frameworks */,
+				EEE1FA032FBA9E5500B662B3 /* Storage in Frameworks */,
+				EEE1FA012FBA9E5500B662B3 /* Realtime in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +129,13 @@
 			);
 			name = weightOtter;
 			packageProductDependencies = (
+				AD00B0011000000000000002 /* GoogleMobileAds */,
+				EEE1F9FA2FBA9E5500B662B3 /* Auth */,
+				EEE1F9FC2FBA9E5500B662B3 /* Functions */,
+				EEE1F9FE2FBA9E5500B662B3 /* PostgREST */,
+				EEE1FA002FBA9E5500B662B3 /* Realtime */,
+				EEE1FA022FBA9E5500B662B3 /* Storage */,
+				EEE1FA042FBA9E5500B662B3 /* Supabase */,
 			);
 			productName = weightOtter;
 			productReference = EEE1F9B12FBA9D0900B662B3 /* weightOtter.app */;
@@ -171,7 +195,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2640;
-				LastUpgradeCheck = 2640;
+				LastUpgradeCheck = 2660;
 				TargetAttributes = {
 					EEE1F9B02FBA9D0900B662B3 = {
 						CreatedOnToolsVersion = 26.4.1;
@@ -192,9 +216,15 @@
 			knownRegions = (
 				en,
 				Base,
+				ja,
+				fr,
 			);
 			mainGroup = EEE1F9A82FBA9D0900B662B3;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				AD00B0011000000000000001 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				EEE1F9F92FBA9E5500B662B3 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EEE1F9B22FBA9D0900B662B3 /* Products */;
 			projectDirPath = "";
@@ -322,12 +352,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -380,11 +411,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -395,16 +427,22 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QC5N2H4TK6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Diet Otter";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "Autorise le suivi pour recevoir des publicites adaptees. Refuser n'empeche rien : tu verras simplement des publicites non personnalisees.";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -413,12 +451,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.t9diet.weightOtter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -427,16 +467,22 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QC5N2H4TK6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Diet Otter";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "Autorise le suivi pour recevoir des publicites adaptees. Refuser n'empeche rien : tu verras simplement des publicites non personnalisees.";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -445,12 +491,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.t9diet.weightOtter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -462,7 +510,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QC5N2H4TK6;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.t9diet.weightOtterTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -484,7 +532,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QC5N2H4TK6;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.t9diet.weightOtterTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -578,6 +626,63 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AD00B0011000000000000001 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.0.0;
+			};
+		};
+		EEE1F9F92FBA9E5500B662B3 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AD00B0011000000000000002 /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AD00B0011000000000000001 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+		EEE1F9FA2FBA9E5500B662B3 /* Auth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EEE1F9F92FBA9E5500B662B3 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Auth;
+		};
+		EEE1F9FC2FBA9E5500B662B3 /* Functions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EEE1F9F92FBA9E5500B662B3 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Functions;
+		};
+		EEE1F9FE2FBA9E5500B662B3 /* PostgREST */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EEE1F9F92FBA9E5500B662B3 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = PostgREST;
+		};
+		EEE1FA002FBA9E5500B662B3 /* Realtime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EEE1F9F92FBA9E5500B662B3 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Realtime;
+		};
+		EEE1FA022FBA9E5500B662B3 /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EEE1F9F92FBA9E5500B662B3 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Storage;
+		};
+		EEE1FA042FBA9E5500B662B3 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EEE1F9F92FBA9E5500B662B3 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EEE1F9A92FBA9D0900B662B3 /* Project object */;
 }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24765" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="WO1-vc-001">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24743"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="WO1-sc-001">
+            <objects>
+                <viewController id="WO1-vc-001" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="WO1-vw-001">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="LaunchStars" translatesAutoresizingMaskIntoConstraints="NO" id="WO1-img-001">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="WO1-sa-001"/>
+                        <color key="backgroundColor" red="0.031" green="0.024" blue="0.070999999999999994" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="WO1-img-001" firstAttribute="bottom" secondItem="WO1-vw-001" secondAttribute="bottom" id="WO1-cst-b"/>
+                            <constraint firstItem="WO1-img-001" firstAttribute="leading" secondItem="WO1-vw-001" secondAttribute="leading" id="WO1-cst-l"/>
+                            <constraint firstItem="WO1-img-001" firstAttribute="trailing" secondItem="WO1-vw-001" secondAttribute="trailing" id="WO1-cst-r"/>
+                            <constraint firstItem="WO1-img-001" firstAttribute="top" secondItem="WO1-vw-001" secondAttribute="top" id="WO1-cst-t"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WO1-fr-001" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="53" y="375"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="LaunchStars" width="1320" height="2868"/>
+    </resources>
+</document>
