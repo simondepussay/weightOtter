@@ -98,7 +98,11 @@ struct ChartView: View {
         .chartXAxis {
             AxisMarks(values: .automatic(desiredCount: 5)) { _ in
                 AxisGridLine().foregroundStyle(Color.woBorder)
-                AxisValueLabel(format: .dateTime.day().month(.abbreviated))
+                // Swift Charts formate avec sa propre locale et ignore
+                // celle de l'environnement : on la force, sinon l'axe reste
+                // en français sous une interface anglaise ou japonaise.
+                AxisValueLabel(format: .dateTime.day().month(.abbreviated)
+                    .locale(Locale(identifier: loc.lang.rawValue)))
                     .foregroundStyle(Color.woText2)
             }
         }

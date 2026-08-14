@@ -28,6 +28,11 @@ struct WeightOtterApp: App {
             }
             .environmentObject(store)
             .environmentObject(loc)
+            // Les composants système (DatePicker, axes de Swift Charts)
+            // suivent la langue de l'iPhone, pas celle choisie dans le
+            // Profil : on obtenait « 14 août 2026 » sous une interface en
+            // anglais. On aligne donc la locale sur le réglage de l'app.
+            .environment(\.locale, Locale(identifier: loc.lang.rawValue))
             .preferredColorScheme(.dark)
         }
     }
