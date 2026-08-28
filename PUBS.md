@@ -37,12 +37,14 @@ pub à chaque saisie.
 | `enabled` | `true` | coupe-circuit global — `false` désactive tout |
 | `cooldown` | 3 min | jamais deux pubs coup sur coup |
 | `maxPerDay` | 6 | plafond quotidien, remis à zéro chaque jour |
-| `grace` | 60 s | aucune pub dans la première minute après le lancement |
+| `maxAge` | 50 min | une pub plus vieille est jetée, jamais présentée |
 
-Deux protections supplémentaires :
+Trois protections supplémentaires :
 - pas de pub si la sauvegarde vient d'échouer (l'alerte d'erreur passe avant) ;
-- si aucune annonce n'est chargée (pas d'inventaire, réseau coupé), **rien ne
-  s'affiche** et le manager recharge en silence — jamais d'écran vide.
+- si aucune annonce n'est chargée ou si elle a expiré, **rien ne s'affiche** et
+  le manager recharge en silence — jamais d'écran vide ;
+- les compteurs (plafond du jour, cooldown) ne sont consommés qu'au moment où
+  la pub s'affiche vraiment. Un affichage raté ne coûte plus un créneau.
 
 Un interstitiel ne sert qu'une fois : le suivant est préchargé dès la
 fermeture du précédent.

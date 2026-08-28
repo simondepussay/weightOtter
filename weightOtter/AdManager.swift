@@ -4,11 +4,10 @@
 //
 //  La pub n'est pas collée à un bouton : on déclare des « moments »
 //  (saisie d'une calorie, ajout d'une pesée…) et le manager décide,
-//  en respectant quatre garde-fous :
+//  en respectant trois garde-fous :
 //     1. une probabilité par moment      → aléatoire, jamais systématique
 //     2. un délai minimum entre 2 pubs   → cooldown
 //     3. un plafond par jour             → maxPerDay
-//     4. une période de grâce au lancement
 //
 //  Chaîne de consentement : UMP (obligatoire en Europe) puis ATT (IDFA).
 //  Sans consentement au suivi, on sert des annonces NON personnalisées —
@@ -55,7 +54,11 @@ enum AdConfig {
 
     static let cooldown: TimeInterval  = 3 * 60   // 3 min entre deux pubs
     static let maxPerDay               = 6        // plafond quotidien
-    static let grace: TimeInterval     = 60       // rien dans la 1re minute
+
+    /// AdMob invalide un interstitiel une heure après son chargement. Passé ce
+    /// délai `present` échoue et l'utilisateur ne voit rien : on le considère
+    /// périmé un peu avant, pour garder de la marge.
+    static let maxAge: TimeInterval    = 50 * 60
 }
 
 // MARK: - Manager
@@ -66,11 +69,18 @@ final class AdManager: NSObject, ObservableObject {
     static let shared = AdManager()
 
     private var interstitial: GADInterstitialAd?
+    private var loadedAt: Date?
     private var loading = false
     private var showing = false
 
-    private let launchedAt = Date()
     private let defaults = UserDefaults.standard
+
+    /// La pub en cache, à condition qu'elle n'ait pas expiré.
+    private var freshAd: GADInterstitialAd? {
+        guard let interstitial, let loadedAt,
+              Date().timeIntervalSince(loadedAt) < AdConfig.maxAge else { return nil }
+        return interstitial
+    }
 
     private enum Keys {
         static let last  = "adLastShown"
@@ -139,10 +149,13 @@ final class AdManager: NSObject, ObservableObject {
 
     /// Précharge l'interstitiel suivant. Un interstitiel ne sert qu'une fois.
     private func preload() async {
-        guard AdConfig.enabled, interstitial == nil, !loading else { return }
+        guard AdConfig.enabled, freshAd == nil, !loading else { return }
         guard UMPConsentInformation.sharedInstance.canRequestAds else { return }
         loading = true
         defer { loading = false }
+
+        interstitial = nil          // périmée, le cas échéant
+        loadedAt = nil
 
         let request = GADRequest()
         if !personalizedAllowed {
@@ -156,9 +169,11 @@ final class AdManager: NSObject, ObservableObject {
             interstitial = try await GADInterstitialAd.load(
                 withAdUnitID: AdConfig.interstitialUnitID, request: request)
             interstitial?.fullScreenContentDelegate = self
+            loadedAt = Date()
         } catch {
             print("AdMob load:", error)
             interstitial = nil
+            loadedAt = nil
         }
     }
 
@@ -175,24 +190,27 @@ final class AdManager: NSObject, ObservableObject {
     /// Tous les garde-fous, hors tirage aléatoire.
     func eligible() -> Bool {
         guard AdConfig.enabled, !showing else { return false }
-        guard Date().timeIntervalSince(launchedAt) >= AdConfig.grace else { return false }
         guard todayCount() < AdConfig.maxPerDay else { return false }
         guard Date().timeIntervalSince(lastShown) >= AdConfig.cooldown else { return false }
         return true
     }
 
-    /// Présente l'interstitiel préchargé. Si rien n'est prêt (pas
-    /// d'inventaire, réseau coupé), on ne montre rien et on recharge —
-    /// jamais d'écran vide à la place.
+    /// Présente l'interstitiel préchargé. Si rien n'est prêt — pas
+    /// d'inventaire, réseau coupé, pub périmée — on ne montre rien et on
+    /// recharge : jamais d'écran vide à la place.
+    ///
+    /// Les compteurs ne sont PAS incrémentés ici : c'est
+    /// `adWillPresentFullScreenContent` qui s'en charge, une fois la
+    /// présentation réellement engagée. Sinon un affichage raté consommait
+    /// un créneau de la journée et déclenchait le cooldown sans que
+    /// l'utilisateur ait rien vu.
     @discardableResult
     private func show() -> Bool {
-        guard let ad = interstitial, let root = Self.rootViewController else {
+        guard let ad = freshAd, let root = Self.rootViewController else {
             Task { await preload() }
             return false
         }
         showing = true
-        lastShown = Date()
-        bumpTodayCount()
         ad.present(fromRootViewController: root)
         return true
     }
@@ -235,10 +253,20 @@ final class AdManager: NSObject, ObservableObject {
 
 extension AdManager: GADFullScreenContentDelegate {
 
+    /// La pub s'affiche vraiment : c'est ici, et seulement ici, qu'on
+    /// consomme un créneau de la journée et qu'on lance le cooldown.
+    nonisolated func adWillPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+        Task { @MainActor in
+            lastShown = Date()
+            bumpTodayCount()
+        }
+    }
+
     nonisolated func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         Task { @MainActor in
             showing = false
             interstitial = nil
+            loadedAt = nil
             await preload()          // on prépare déjà la suivante
         }
     }
@@ -247,8 +275,11 @@ extension AdManager: GADFullScreenContentDelegate {
                         didFailToPresentFullScreenContentWithError error: Error) {
         print("AdMob present:", error)
         Task { @MainActor in
+            // Aucun compteur touché : l'utilisateur n'a rien vu, le créneau
+            // reste disponible pour la prochaine tentative.
             showing = false
             interstitial = nil
+            loadedAt = nil
             await preload()
         }
     }
