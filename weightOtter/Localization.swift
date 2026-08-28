@@ -239,6 +239,8 @@ final class Localizer: ObservableObject {
         "chart.seg.weight": ["POIDS", "WEIGHT", "体重"],
         "chart.seg.fat":    ["GRAISSE", "FAT", "体脂肪"],
         "chart.seg.cal":    ["CALORIES", "CALORIES", "カロリー"],
+        "chart.cal.daily":    ["Par jour", "Daily", "日ごと"],
+        "chart.cal.smoothed": ["Moyenne 7 j", "7-day average", "7日間平均"],
         "chart.weight":  ["POIDS", "WEIGHT", "体重"],
         "chart.bf":      ["% MASSE GRASSE", "% BODY FAT", "体脂肪率"],
         "chart.bf.kg":   ["MASSE GRASSE (KG)", "FAT MASS (KG)", "体脂肪量 (KG)"],

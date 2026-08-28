@@ -15,9 +15,13 @@ struct ChartView: View {
     @EnvironmentObject var store: Store
     @EnvironmentObject var loc: Localizer
 
-    @State private var mode = 0          // 0 = poids, 1 = masse grasse
+    @State private var mode = 0          // 0 = poids, 1 = masse grasse, 2 = calories
     @State private var bfUnit = 0        // 0 = %, 1 = kg (mode masse grasse)
+    @State private var calSmooth = false // lissage par blocs de 7 jours
     @State private var projDays = 100
+
+    /// Taille d'un bloc de lissage, en jours.
+    private let smoothingWindow = 7
 
     private let projOptions = [0, 10, 50, 100]
 
@@ -39,6 +43,17 @@ struct ChartView: View {
                     }
                     .pickerStyle(.segmented)
                     .frame(maxWidth: 220)
+                }
+
+                // Lissage en mode calories : les valeurs quotidiennes sautent
+                // trop pour qu'une tendance soit lisible.
+                if mode == 2 {
+                    Picker("", selection: $calSmooth) {
+                        Text(loc.t("chart.cal.daily")).tag(false)
+                        Text(loc.t("chart.cal.smoothed")).tag(true)
+                    }
+                    .pickerStyle(.segmented)
+                    .frame(maxWidth: 260)
                 }
 
                 if realPoints.count < 2 {
@@ -194,11 +209,56 @@ struct ChartView: View {
         for t in store.tracks where t.cal > 0 {
             calByDate[t.date] = t.cal
         }
-        return calByDate.compactMap { (date, cal) -> ChartPoint? in
+        let daily = calByDate.compactMap { (date, cal) -> ChartPoint? in
             guard let d = DateHelper.date(from: date) else { return nil }
             return ChartPoint(date: d, value: Double(cal))
         }
         .sorted { $0.date < $1.date }
+
+        return calSmooth ? smoothed(daily) : daily
+    }
+
+    /// Découpe la série en blocs de `smoothingWindow` jours calendaires et
+    /// remplace chaque valeur par la moyenne de son bloc.
+    ///
+    /// Les apports quotidiens sautent trop d'un jour à l'autre — un repas de
+    /// famille, un jour de jeûne — pour qu'on lise quoi que ce soit sur la
+    /// courbe brute. Aplatir chaque semaine donne un escalier où la tendance
+    /// saute aux yeux.
+    ///
+    /// La moyenne ne porte que sur les jours réellement enregistrés du bloc :
+    /// une semaine où seuls deux jours ont été saisis n'est pas tirée vers le
+    /// bas par cinq zéros fictifs.
+    private func smoothed(_ points: [ChartPoint]) -> [ChartPoint] {
+        guard let first = points.first?.date else { return points }
+        let cal = Calendar.current
+
+        var out: [ChartPoint] = []
+        var bucket: [ChartPoint] = []
+        var bucketStart = first
+
+        func flush() {
+            guard !bucket.isEmpty else { return }
+            let avg = bucket.reduce(0) { $0 + $1.value } / Double(bucket.count)
+            out.append(contentsOf: bucket.map { ChartPoint(date: $0.date, value: avg) })
+            bucket = []
+        }
+
+        for p in points {
+            let elapsed = cal.dateComponents([.day], from: bucketStart, to: p.date).day ?? 0
+            if elapsed >= smoothingWindow {
+                flush()
+                // On recale sur un multiple entier de la fenêtre : les blocs
+                // restent alignés même après plusieurs jours sans saisie.
+                let jumps = elapsed / smoothingWindow
+                bucketStart = cal.date(byAdding: .day,
+                                       value: jumps * smoothingWindow,
+                                       to: bucketStart) ?? p.date
+            }
+            bucket.append(p)
+        }
+        flush()
+        return out
     }
 
     /// Projection linéaire — 1 point par jour à venir (mode poids uniquement).
