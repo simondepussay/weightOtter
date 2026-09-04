@@ -11,6 +11,10 @@ struct TrackView: View {
     @State private var digicode: DigicodeTarget?
     @State private var selectedDate = DateHelper.today
 
+    /// Moment publicitaire mérité, en attente que le digicode ait fini de se
+    /// fermer. Voir `firePendingAd()`.
+    @State private var pendingAd: AdTrigger?
+
     private var isToday: Bool { selectedDate == DateHelper.today }
 
     var body: some View {
@@ -35,17 +39,36 @@ struct TrackView: View {
             .background(Color.woBg.ignoresSafeArea())
             .navigationTitle(loc.t("nav.track"))
         }
-        .sheet(item: $digicode) { target in
+        .sheet(item: $digicode, onDismiss: firePendingAd) { target in
             DigicodeSheet(target: target) { value in
                 Task {
                     await store.setTrack(field: target.field,
                                          value: value, date: target.date)
                     guard store.opError == nil else { return }
-                    // Moment publicitaire : une valeur vient d'être saisie.
-                    AdManager.shared.maybeShow(target.field == .cal ? .calorie : .protein)
+
+                    // On ne présente pas la pub d'ici : le digicode est encore
+                    // à l'écran, et UIKit refuse d'afficher un interstitiel
+                    // par-dessus une feuille en cours de fermeture. On note le
+                    // moment mérité, `onDismiss` le déclenchera.
+                    pendingAd = target.field == .cal ? .calorie : .protein
+                    if digicode == nil { firePendingAd() }   // déjà refermé
                 }
             }
             .environmentObject(loc)
+        }
+    }
+
+    /// Affiche la pub en attente, une fois le digicode réellement refermé.
+    /// Appelé par `onDismiss`, ou par la sauvegarde si elle se termine après.
+    /// Le `pendingAd` est vidé d'abord : impossible de la jouer deux fois.
+    private func firePendingAd() {
+        guard let trigger = pendingAd else { return }
+        pendingAd = nil
+        Task {
+            // Laisser l'animation de fermeture se terminer, sinon le
+            // contrôleur au premier plan est encore la feuille.
+            try? await Task.sleep(nanoseconds: 350_000_000)
+            AdManager.shared.maybeShow(trigger)
         }
     }
 

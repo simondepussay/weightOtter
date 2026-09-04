@@ -122,9 +122,9 @@ final class AdManager: NSObject, ObservableObject {
                 }
         }
 
-        guard let root = Self.rootViewController else { return }
+        guard let host = Self.presenter else { return }
         await withCheckedContinuation { continuation in
-            UMPConsentForm.loadAndPresentIfRequired(from: root) { error in
+            UMPConsentForm.loadAndPresentIfRequired(from: host) { error in
                 if let error { print("UMP loadAndPresentIfRequired:", error) }
                 continuation.resume()
             }
@@ -206,12 +206,12 @@ final class AdManager: NSObject, ObservableObject {
     /// l'utilisateur ait rien vu.
     @discardableResult
     private func show() -> Bool {
-        guard let ad = freshAd, let root = Self.rootViewController else {
+        guard let ad = freshAd, let host = Self.presenter else {
             Task { await preload() }
             return false
         }
         showing = true
-        ad.present(fromRootViewController: root)
+        ad.present(fromRootViewController: host)
         return true
     }
 
@@ -239,13 +239,32 @@ final class AdManager: NSObject, ObservableObject {
 
     // MARK: Utilitaire
 
-    /// Contrôleur racine pour présenter l'annonce.
-    private static var rootViewController: UIViewController? {
-        UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .flatMap { $0.windows }
-            .first { $0.isKeyWindow }?
+    /// Contrôleur depuis lequel présenter l'annonce.
+    ///
+    /// Surtout pas la racine : au moment d'une saisie de calories, la feuille
+    /// du digicode lui est encore attachée, et UIKit refuse de présenter sur
+    /// un contrôleur qui présente déjà quelque chose. On descend donc jusqu'au
+    /// contrôleur réellement au premier plan.
+    ///
+    /// Une feuille en cours de fermeture est ignorée : présenter dessus
+    /// échouerait tout autant.
+    private static var presenter: UIViewController? {
+        guard var vc = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .flatMap({ $0.windows })
+            .first(where: { $0.isKeyWindow })?
             .rootViewController
+        else { return nil }
+
+        while let presented = vc.presentedViewController, !presented.isBeingDismissed {
+            vc = presented
+        }
+        // La racine est encore occupée par une feuille qui se ferme : on
+        // laisse passer ce tour plutôt que de brûler l'annonce.
+        if let presented = vc.presentedViewController, presented.isBeingDismissed {
+            return nil
+        }
+        return vc
     }
 }
 
