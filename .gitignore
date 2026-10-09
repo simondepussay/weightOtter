@@ -21,3 +21,6 @@ DerivedData/
 # exactes des dépendances (Supabase, Google Mobile Ads).
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
 .build/
+
+# Configuration Supabase (voir Secrets.example.swift)
+weightOtter/Secrets.swift
